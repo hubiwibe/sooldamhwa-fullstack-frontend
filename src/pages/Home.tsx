@@ -6,14 +6,14 @@ import MatchResult from '../components/MatchResult';
 import AddedUsers from '../components/AddedUsers';
 import GroupOptions from '../components/GroupOptions';
 
-const Home = memo(() => {
+const Home: React.FC = memo(() => {
   const boxMargin = 4;
   const dividerHeight = '10px';
 
   return (
     <div>
       <Container maxWidth='md'>
-        <Box m={boxMargin} />
+        <Box m={boxMargin + 1} />
         <Header />
         <Box m={boxMargin} />
         <AddedUsers />
