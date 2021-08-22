@@ -1,8 +1,37 @@
 import { Box, Button, TextField } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
+import { useCallback } from 'react';
+import { addUserThunk } from '../modules/user';
+import { UserDispatchProps } from '../types';
 
-const Header: React.FC = memo(() => {
+const Header: React.FC<UserDispatchProps> = memo(({ users, dispatch }) => {
+  const [name, setName] = useState('');
+
+  const handleNameChange = useCallback(
+    event => {
+      const value = event.target.value;
+      if (name !== value) {
+        setName(() => value);
+      }
+    },
+    [name]
+  );
+
+  const handleAddUser = useCallback(() => {
+    if (name === '') {
+      alert('이름은 빈 값일 수 없습니다.');
+    } else {
+      const user = users.find(user => user.name === name);
+      if (user) {
+        alert('이미 존재하는 사용자 입니다.');
+      } else {
+        dispatch(addUserThunk(name));
+        setName(() => '');
+      }
+    }
+  }, [dispatch, name, users]);
+
   return (
     <Box display='flex' justifyContent='center' maxHeight='56px'>
       <img src='/logo.png' alt='로고' width='170px' />
@@ -10,10 +39,17 @@ const Header: React.FC = memo(() => {
       <TextField
         style={{ minWidth: '320px' }}
         label='이름'
+        value={name}
         variant='outlined'
+        onChange={handleNameChange}
       />
       <Box m={1} />
-      <Button variant='outlined' color='primary' startIcon={<Add />}>
+      <Button
+        variant='outlined'
+        color='primary'
+        startIcon={<Add />}
+        onClick={handleAddUser}
+      >
         사용자 추가
       </Button>
     </Box>

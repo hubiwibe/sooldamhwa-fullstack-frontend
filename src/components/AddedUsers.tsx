@@ -1,61 +1,40 @@
-import { Box, Chip } from '@material-ui/core';
+import { Box, Chip, Typography } from '@material-ui/core';
 import { Face } from '@material-ui/icons';
-import { useCallback } from 'react';
-import { memo, useState } from 'react';
+import { memo } from 'react';
+import { deleteUserThunk } from '../modules/user';
+import { UserDispatchProps } from '../types';
 
-type User = {
-  name: string;
-};
-
-const initialUsers = [
-  { name: '술담화' },
-  { name: '구독서비스' },
-  { name: '담화마켓' },
-];
-
-for (let i = 0; i < 30; i++) {
-  initialUsers.push({ name: `전통주${i}` });
-}
-
-const AddedUsers: React.FC = memo(() => {
-  const [users, setUsers] = useState<User[]>(initialUsers);
-
-  const randomColor = useCallback(() => {
-    const random = Math.floor(Math.random() * 3);
-    return random > 0 ? (random === 1 ? 'primary' : 'secondary') : 'default';
-  }, []);
-
-  const handleDelete = useCallback(
-    (name: string) => {
-      setUsers(users.filter(user => user.name !== name));
-    },
-    [users]
-  );
+const AddedUsers: React.FC<UserDispatchProps> = memo(({ users, dispatch }) => {
+  const handleDelete = (name: string) => dispatch(deleteUserThunk(name));
 
   return (
     <Box
       display='flex'
       flexWrap='wrap'
+      minHeight='10vh'
       maxHeight='15vh'
       overflow='auto'
       ml={4}
       mr={4}
-      p={1}
       border='1px solid rgba(0,0,0,0.25)'
       borderRadius={5}
       justifyContent='center'
+      alignContent='center'
     >
-      {users.map(user => (
-        <Box key={user.name} m={1}>
-          <Chip
-            icon={<Face />}
-            label={user.name}
-            variant='outlined'
-            color={randomColor()}
-            onDelete={() => handleDelete(user.name)}
-          />
-        </Box>
-      ))}
+      {users?.length > 0 ? (
+        users.map(user => (
+          <Box key={user.name} m={1}>
+            <Chip
+              icon={<Face />}
+              label={user.name}
+              variant='outlined'
+              onDelete={() => handleDelete(user.name)}
+            />
+          </Box>
+        ))
+      ) : (
+        <Typography>사용자를 추가해 주세요</Typography>
+      )}
     </Box>
   );
 });
