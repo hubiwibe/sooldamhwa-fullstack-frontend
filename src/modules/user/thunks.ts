@@ -37,7 +37,6 @@ export function deleteUserThunk(name: string): UserActionType {
     const { request, success, failure } = deleteUserAsync;
     dispatch(request());
     try {
-      console.log(name);
       const statusCode = await deleteUser(name);
       dispatch(success(statusCode));
     } catch (error) {

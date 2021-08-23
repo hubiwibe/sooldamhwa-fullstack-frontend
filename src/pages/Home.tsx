@@ -29,7 +29,6 @@ const Home: React.FC = memo(() => {
     (groupCount: Number, groupUserMinCount: Number) => {
       const suffleUsers: User[] = [...(users as User[])];
       suffleUsers.sort(() => Math.random() - 0.5);
-      console.log(suffleUsers);
 
       const suffleGroups: Array<User[]> = [];
 
