@@ -2,7 +2,6 @@ import { Box, Button, TextField } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import React, { memo, useState } from 'react';
 import { useCallback } from 'react';
-import Swal from 'sweetalert2';
 import { UserAlertMessage } from '../messages';
 import { addUserThunk } from '../modules/user';
 import { UserDispatchProps } from '../types';
