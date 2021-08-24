@@ -2,7 +2,10 @@ import { Box, Button, TextField } from '@material-ui/core';
 import { Autorenew } from '@material-ui/icons';
 import React, { memo, useState } from 'react';
 import { useCallback } from 'react';
+import Swal from 'sweetalert2';
+import { UserAlertMessage } from '../messages';
 import { User } from '../types';
+import swalFire from '../utils/swalFire';
 
 type GroupOptionsProps = {
   users: User[];
@@ -22,12 +25,12 @@ const GroupOptions: React.FC<GroupOptionsProps> = memo(
         if (+groupUserMinCount * value <= users.length) {
           value > 0
             ? setGroupCount(() => value)
-            : alert('그룹 수는 1개 이상이어야 합니다.');
+            : swalFire.error(UserAlertMessage.oneOrMoreGroups);
         } else {
-          alert('그룹 수는 사용자 인원수 보다 작아야 합니다.');
+          swalFire.error(UserAlertMessage.groupCountLessThanUserCount);
         }
       },
-      [groupUserMinCount, users]
+      [groupUserMinCount, users],
     );
 
     const handleGroupUserMinCountChange = useCallback(
@@ -36,38 +39,38 @@ const GroupOptions: React.FC<GroupOptionsProps> = memo(
         if (+groupCount * value <= users.length) {
           value > 0
             ? setGroupUserMinCount(() => value)
-            : alert('그룹별 최소 인원 수는 1명 이상이어야 합니다.');
+            : swalFire.error(UserAlertMessage.userPerGroupMinOneOrMore);
         } else {
-          alert('그룹별 최소 인원 수가 구성할 수 있는 그룹 수를 초과합니다.');
+          swalFire.error(UserAlertMessage.minUserCountPerGroupExceedGroupCount);
         }
       },
-      [groupCount, users]
+      [groupCount, users],
     );
 
     return (
-      <Box display='flex' justifyContent='center'>
+      <Box display="flex" justifyContent="center">
         <TextField
           style={TextFieldStyle}
-          label='그룹 수'
-          variant='outlined'
-          type='number'
+          label="그룹 수"
+          variant="outlined"
+          type="number"
           value={groupCount}
           onChange={handleGroupCountChange}
         />
         <Box m={1} />
         <TextField
           style={TextFieldStyle}
-          label='그룹별 최소 인원 수'
-          variant='outlined'
-          type='number'
+          label="그룹별 최소 인원 수"
+          variant="outlined"
+          type="number"
           value={groupUserMinCount}
           onChange={handleGroupUserMinCountChange}
         />
         <Box m={1} />
         <Button
           disabled={users?.length === 0}
-          variant='outlined'
-          color='secondary'
+          variant="outlined"
+          color="secondary"
           startIcon={<Autorenew />}
           onClick={() => handleRandomMatch(groupCount, groupUserMinCount)}
         >
@@ -75,7 +78,7 @@ const GroupOptions: React.FC<GroupOptionsProps> = memo(
         </Button>
       </Box>
     );
-  }
+  },
 );
 
 export default GroupOptions;
